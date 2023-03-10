@@ -11,7 +11,7 @@ TaskTape is a Progressive Web App (PWA) built with React, using Fluent UI for a 
 - Time management: Track the time spent on tasks and view time management metrics
 - Metrics: View a variety of metrics and charts to help monitor productivity and progress
 - Scheduling: Use the calendar view to schedule tasks and manage deadlines
-- Customizability/Settings: Customize the app to your preferences with settings such as dark mode, notifications, and more
+- Customisability/Settings: Customize the app to your preferences with settings such as dark mode, notifications, and more
 
 ## Technologies
 
