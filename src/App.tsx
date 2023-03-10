@@ -21,6 +21,9 @@ import {
 import { Dashboard } from "./pages/Dashboard";
 import { Tasks } from "./pages/Tasks";
 import { Schedule } from "./pages/Schedule";
+import { Pomodoro } from "./pages/Pomodoro";
+import { Metrics } from "./pages/Metrics";
+import { SettingsPage } from "./pages/Settings";
 
 import * as React from "react";
 
@@ -82,6 +85,9 @@ export const App = () => {
                 {selectedValue === "dashboard" && <Dashboard />}
                 {selectedValue === "tasks" && <Tasks />}
                 {selectedValue === "schedule" && <Schedule />}
+                {selectedValue === "timer" && <Pomodoro />}
+                {selectedValue === "metrics" && <Metrics />}
+                {selectedValue === "settings" && <SettingsPage />}
             </div>
         </div>
     );
