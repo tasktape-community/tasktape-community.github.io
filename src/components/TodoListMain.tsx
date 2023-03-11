@@ -99,10 +99,10 @@ export const TodoMain = (props: any) => {
   
     const styles = useStyles();
 
-    const allTodos = todos;
     const activeTodos = todos.filter((todo) => !todo.completed);
     const completedTodos = todos.filter((todo) => todo.completed);
-
+    
+    const allTodos = [...activeTodos, ...completedTodos];
     
     const [selectedValue, setSelectedValue] = React.useState<TabValue>(
         "all"
