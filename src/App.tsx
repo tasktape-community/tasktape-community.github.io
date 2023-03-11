@@ -25,6 +25,8 @@ import { Pomodoro } from "./pages/Pomodoro";
 import { Metrics } from "./pages/Metrics";
 import { SettingsPage } from "./pages/Settings";
 
+import { Alert } from "@fluentui/react-components/unstable";
+
 import * as React from "react";
 
 const Home = bundleIcon(HomeFilled, HomeRegular);
@@ -49,7 +51,13 @@ const useStyles = makeStyles({
             textAlign: "left",
             ...shorthands.padding(0, "30px", 0, 0),
         },
-    }
+    },
+    infoMessage: {
+        position: "absolute",
+        bottom: "10px",
+        left: "50%",
+        transform: "translateX(-50%)",
+    },
 });
   
 export const App = () => {
@@ -89,6 +97,9 @@ export const App = () => {
                 {selectedValue === "metrics" && <Metrics />}
                 {selectedValue === "settings" && <SettingsPage />}
             </div>
+            <Alert appearance={"inverted"} intent="info" className={styles.infoMessage}>
+                TaskTape is currently under construction. Not all functionality is available.
+            </Alert>
         </div>
     );
 };
