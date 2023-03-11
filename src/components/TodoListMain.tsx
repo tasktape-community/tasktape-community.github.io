@@ -82,27 +82,26 @@ export const TodoMain = (props: any) => {
         console.log("toggleComplete");
         // console.log(localStorage.getItem("todoData"));
     };
-
-    const currentTab = (tab: TabValue) => {
-        switch (tab) {
-            case "all":
-                return todos;
-            case "active":
-                return todos.filter((todo) => !todo.completed);
-            case "completed":
-                return todos.filter((todo) => todo.completed);
-            default:
-                return todos;
-        }
-    };
-      
-  
     const styles = useStyles();
 
     const activeTodos = todos.filter((todo) => !todo.completed);
     const completedTodos = todos.filter((todo) => todo.completed);
     
     const allTodos = [...activeTodos, ...completedTodos];
+    console.log(allTodos);
+
+    const currentTab = (tab: TabValue) => {
+        switch (tab) {
+            case "all":
+                return allTodos;
+            case "active":
+                return activeTodos;
+            case "completed":
+                return completedTodos;
+            default:
+                return todos;
+        }
+    };
     
     const [selectedValue, setSelectedValue] = React.useState<TabValue>(
         "all"
