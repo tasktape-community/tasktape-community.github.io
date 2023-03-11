@@ -58,9 +58,10 @@ const useStyles = makeStyles({
         bottom: "10px",
         left: "50%",
         transform: "translateX(-50%)",
+        paddingRight: "0",
     },
     buttonLink: {
-        marginLeft: "10px",
+        ...shorthands.margin("10px")
     },
 });
   
