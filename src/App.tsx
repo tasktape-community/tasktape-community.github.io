@@ -5,6 +5,7 @@ import {
     TabValue,
     SelectTabEvent,
     SelectTabData,
+    Button,
     shorthands
 } from "@fluentui/react-components";
 
@@ -58,6 +59,9 @@ const useStyles = makeStyles({
         left: "50%",
         transform: "translateX(-50%)",
     },
+    buttonLink: {
+        marginLeft: "10px",
+    },
 });
   
 export const App = () => {
@@ -99,6 +103,10 @@ export const App = () => {
             </div>
             <Alert appearance={"inverted"} intent="info" className={styles.infoMessage}>
                 TaskTape is currently under construction. Not all functionality is available.
+                <Button className={styles.buttonLink} onClick={() => window.open("https://github.com/tasktape-community/tasktape-community.github.io", "_blank")}>
+                    Please contribute here
+                </Button>
+                
             </Alert>
         </div>
     );
