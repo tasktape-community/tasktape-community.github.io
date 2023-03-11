@@ -5,6 +5,7 @@ import {
     TabValue,
     SelectTabEvent,
     SelectTabData,
+    Button,
     shorthands
 } from "@fluentui/react-components";
 
@@ -24,6 +25,8 @@ import { Schedule } from "./pages/Schedule";
 import { Pomodoro } from "./pages/Pomodoro";
 import { Metrics } from "./pages/Metrics";
 import { SettingsPage } from "./pages/Settings";
+
+import { Alert } from "@fluentui/react-components/unstable";
 
 import * as React from "react";
 
@@ -49,7 +52,17 @@ const useStyles = makeStyles({
             textAlign: "left",
             ...shorthands.padding(0, "30px", 0, 0),
         },
-    }
+    },
+    infoMessage: {
+        position: "absolute",
+        bottom: "10px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        paddingRight: "0",
+    },
+    buttonLink: {
+        ...shorthands.margin("10px")
+    },
 });
   
 export const App = () => {
@@ -89,6 +102,13 @@ export const App = () => {
                 {selectedValue === "metrics" && <Metrics />}
                 {selectedValue === "settings" && <SettingsPage />}
             </div>
+            <Alert appearance={"inverted"} intent="info" className={styles.infoMessage}>
+                TaskTape is currently under construction. Not all functionality is available.
+                <Button className={styles.buttonLink} onClick={() => window.open("https://github.com/tasktape-community/tasktape-community.github.io", "_blank")}>
+                    Please contribute here
+                </Button>
+                
+            </Alert>
         </div>
     );
 };

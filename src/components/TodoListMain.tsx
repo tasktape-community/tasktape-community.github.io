@@ -48,8 +48,8 @@ export const TodoMain = (props: any) => {
         JSON.parse(localStorage.getItem("todoData") || "[]")
     );
 
-    console.log("TodoMain");
-    console.log(localStorage.getItem("todoData"));
+    // console.log("TodoMain");
+    // console.log(localStorage.getItem("todoData"));
   
     const addTodo = (todoName: string) => {
         if (todoName !== "") {
@@ -58,7 +58,7 @@ export const TodoMain = (props: any) => {
             setTodos(newTodos);
             localStorage.setItem("todoData", JSON.stringify(newTodos));
             console.log("addTodo");
-            console.log(localStorage.getItem("todoData"));
+            // console.log(localStorage.getItem("todoData"));
         }
     };
   
@@ -67,7 +67,7 @@ export const TodoMain = (props: any) => {
         setTodos(newTasks);
         localStorage.setItem("todoData", JSON.stringify(newTasks));
         console.log("deleteTodo");
-        console.log(localStorage.getItem("todoData"));
+        // console.log(localStorage.getItem("todoData"));
     };
 
     const toggleComplete = (id: number) => {
@@ -80,29 +80,28 @@ export const TodoMain = (props: any) => {
         setTodos(newTodos);
         localStorage.setItem("todoData", JSON.stringify(newTodos));
         console.log("toggleComplete");
-        console.log(localStorage.getItem("todoData"));
+        // console.log(localStorage.getItem("todoData"));
     };
+    const styles = useStyles();
+
+    const activeTodos = todos.filter((todo) => !todo.completed);
+    const completedTodos = todos.filter((todo) => todo.completed);
+    
+    const allTodos = [...activeTodos, ...completedTodos];
+    console.log(allTodos);
 
     const currentTab = (tab: TabValue) => {
         switch (tab) {
             case "all":
-                return todos;
+                return allTodos;
             case "active":
-                return todos.filter((todo) => !todo.completed);
+                return activeTodos;
             case "completed":
-                return todos.filter((todo) => todo.completed);
+                return completedTodos;
             default:
                 return todos;
         }
     };
-      
-  
-    const styles = useStyles();
-
-    const allTodos = todos;
-    const activeTodos = todos.filter((todo) => !todo.completed);
-    const completedTodos = todos.filter((todo) => todo.completed);
-
     
     const [selectedValue, setSelectedValue] = React.useState<TabValue>(
         "all"
@@ -129,7 +128,7 @@ export const TodoMain = (props: any) => {
                     </Tab>
                 </TabList>
 
-                {selectedValue === "all" && <TodoList todos={currentTab(selectedValue)} deleteTodo={deleteTodo} toggleComplete={toggleComplete} />}
+                {selectedValue === "all" && <TodoList todos={currentTab(selectedValue)} deleteTodo={deleteTodo} toggleComplete={toggleComplete}/>}
                 {selectedValue === "active" && <TodoList todos={currentTab(selectedValue)} deleteTodo={deleteTodo} toggleComplete={toggleComplete} />}
                 {selectedValue === "completed" && <TodoList todos={currentTab(selectedValue)} deleteTodo={deleteTodo} toggleComplete={toggleComplete} />}
                 

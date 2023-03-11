@@ -30,7 +30,7 @@ export const TodoList = (props: any) => {
     return (
     <div className={styles.root}>
         { props.todos.length > 0 ? props.todos.map((todo: any) => (
-            <TodoItem todo={todo} key={todo.id} deleteTodo={props.deleteTodo} />
+            <TodoItem todo={todo} key={todo.id} deleteTodo={props.deleteTodo} checkedTodo={props.checkedTodo} toggleComplete={props.toggleComplete}/>
         )): 
         <Label>Todo list is empty...</Label>}
     </div>
