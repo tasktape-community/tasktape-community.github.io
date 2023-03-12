@@ -25,7 +25,7 @@ export const TodoFooter = (props: any) => {
         <Label>{props.todos.filter((todo: any) => !todo.completed).length} items remaining</Label>
 
         <Button aria-label="inline" type="submit" onClick={() => props.archiveCompleted()}>
-            Archive Completed ({props.todos.filter((todo: any) => todo.completed).length})
+            Archive Completed {/*({props.todos.filter((todo: any) => todo.completed).length})*/}
         </Button>
     </div>
     );
