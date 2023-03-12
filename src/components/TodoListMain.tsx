@@ -9,6 +9,7 @@ import {
 } from "@fluentui/react-components";
 import { Card } from '@fluentui/react-components/unstable';
 import { AddTodo } from './TodoAdd';
+import { TodoFooter } from "./TodoFooter";
 import { TodoList } from './TodoList';
 import React, { useState } from 'react';
 
@@ -34,6 +35,9 @@ interface Todo {
     id: number;
     name: string;
     completed: boolean;
+    dateCreated: Date;
+    dateCompleted?: Date; // optional
+    dateArchived?: Date; // optional
 }
   
 export const TodoMain = (props: any) => {
@@ -48,13 +52,17 @@ export const TodoMain = (props: any) => {
         JSON.parse(localStorage.getItem("todoData") || "[]")
     );
 
+    const [archivedTodos, setArchivedTodos] = useState<Todo[]>(
+        JSON.parse(localStorage.getItem("todoArchive") || "[]")
+    );
+
     // console.log("TodoMain");
     // console.log(localStorage.getItem("todoData"));
   
     const addTodo = (todoName: string) => {
         if (todoName !== "") {
             const newId = todos.length + 1;
-            const newTodos = [...todos, { id: newId, name: todoName, completed: false }];
+            const newTodos = [...todos, { id: newId, name: todoName, completed: false, dateCreated: new Date() }];
             setTodos(newTodos);
             localStorage.setItem("todoData", JSON.stringify(newTodos));
             console.log("addTodo");
@@ -74,6 +82,7 @@ export const TodoMain = (props: any) => {
         const newTodos = todos.map((todo) => {
             if (todo.id === id) {
                 todo.completed = !todo.completed;
+                todo.dateCompleted = new Date();
             }
             return todo;
         });
@@ -86,8 +95,11 @@ export const TodoMain = (props: any) => {
 
     const activeTodos = todos.filter((todo) => !todo.completed);
     const completedTodos = todos.filter((todo) => todo.completed);
-    
     const allTodos = [...activeTodos, ...completedTodos];
+
+    console.log("archivedTodos");
+    console.log(archivedTodos);
+    console.log("allTodos");
     console.log(allTodos);
 
     const currentTab = (tab: TabValue) => {
@@ -128,10 +140,44 @@ export const TodoMain = (props: any) => {
                     </Tab>
                 </TabList>
 
-                {selectedValue === "all" && <TodoList todos={currentTab(selectedValue)} deleteTodo={deleteTodo} toggleComplete={toggleComplete}/>}
-                {selectedValue === "active" && <TodoList todos={currentTab(selectedValue)} deleteTodo={deleteTodo} toggleComplete={toggleComplete} />}
-                {selectedValue === "completed" && <TodoList todos={currentTab(selectedValue)} deleteTodo={deleteTodo} toggleComplete={toggleComplete} />}
-                
+                <TodoList 
+                    todos={currentTab(selectedValue)} 
+                    deleteTodo={deleteTodo} 
+                    toggleComplete={toggleComplete} 
+                    visible={selectedValue === "all" || selectedValue === "active" || selectedValue === "completed"}
+                />
+
+                <TodoFooter
+                    todos={todos}
+                    clearCompleted={() => {
+                        // remove all completed todos
+                        const newTodos = todos.filter((todo) => !todo.completed);
+                        setTodos(newTodos);
+                        localStorage.setItem("todoData", JSON.stringify(newTodos));
+                        console.log("removeAll");
+                    }}
+                    archiveCompleted={() => {
+                        // remove all completed todos
+                        const newTodos = todos.map((todo) => { // Adds a dateArchived property to each todo
+                            if (todo.completed) {
+                                todo.dateArchived = new Date();
+                            }
+                            return todo;
+                        }).filter((todo) => !todo.completed); // Get the existing data
+
+                        setTodos(newTodos); // Update the state
+                        localStorage.setItem("todoData", JSON.stringify(newTodos)); // Store the new array in localStorage
+                        console.log("removeAll");
+
+                        // move all completed todos to another list
+                        const existingArchivedTodos = JSON.parse(localStorage.getItem("todoArchive") || "[]"); // Get the existing data
+                        const newArchivedTodos = existingArchivedTodos.concat(completedTodos); // Combine the existing and completed todos into a new array
+                        setArchivedTodos(completedTodos); // Update the state
+                        localStorage.setItem("todoArchive", JSON.stringify(newArchivedTodos)); // Store the new array in localStorage
+                        console.log("archiveAll");
+                    }}
+
+                />
             </Card>
         </div>
     );

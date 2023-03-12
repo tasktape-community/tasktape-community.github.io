@@ -4,7 +4,6 @@ import {
     useId,
     Input,
     Button,
-    shorthands
 } from "@fluentui/react-components";
 import React, { useState } from 'react';
 
@@ -13,10 +12,6 @@ const useStyles = makeStyles({
         display: "flex",
         flexDirection: "column",
         rowGap: "5px",
-    },
-    card: {
-        ...shorthands.margin("auto"),
-        maxWidth: "100%",
     },
     newTask: {
         display: "flex",
