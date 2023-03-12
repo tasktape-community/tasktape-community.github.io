@@ -1,0 +1,16 @@
+name: Greetings
+
+on: [pull_request_target, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: "Welcome to TaskTape! We're happy to have you here. If you have any questions or issues, feel free to reach out. \n\nHappy task managing! 🎉"
+        pr-message: "Welcome to TaskTape! Thank you for your contribution. We appreciate your help in making TaskTape better. 🤝"
