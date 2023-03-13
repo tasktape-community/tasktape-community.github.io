@@ -19,19 +19,56 @@ const useStyles = makeStyles({
     },
 });
 
-
-
 /* ------------------------------ ArchivedMain ------------------------------ */
 export const ArchivedMain = (props: any) => {
     const styles = useStyles();
+
+    const addTodo = (todoName: string) => {
+        if (todoName !== "") {
+            const newId = props.todos.length + 1;
+            const newTodos = [...props.todos, { id: newId, name: todoName, completed: false, dateCreated: new Date(), archived: false }];
+            props.setTodos(newTodos);
+            localStorage.setItem("todoData", JSON.stringify(newTodos));
+            console.log("addTodo");
+        }
+    };
+    
+    const deleteTodo = (id: number) => {
+        const newTasks = props.todos.filter((todo: any) => todo.id !== id);
+        props.setTodos(newTasks);
+        localStorage.setItem("todoData", JSON.stringify(newTasks));
+        console.log("deleteTodo");
+    };
+    
+    const toggleComplete = (id: number) => {
+        const newTodos = props.todos.map((todo: any) => {
+            if (todo.id === id) {
+                todo.completed = !todo.completed;
+                if (todo.archived) { // if the task is archived, unarchive it
+                todo.archived = false;
+                }
+                if (todo.completed) { // set the dateCompleted to the current date if the task is completed
+                todo.dateCompleted = new Date();
+                }
+            }
+            return todo;
+        });
+        props.setTodos(newTodos);
+        localStorage.setItem("todoData", JSON.stringify(newTodos));
+        console.log("toggleComplete");
+    };
 
     return (
         <div className={styles.root}>
             <Card className={styles.card} appearance="filled-alternative">
                 <h2>Archived Tasks</h2>
-                <ArchivedList todos={props.archivedTodos} deleteTodo={props.deleteTodoArchive} toggleComplete={props.toggleCompleteArchive}/>
+                <ArchivedList 
+                    todos={props.todos.filter((todo: any) => todo.archived === true)}
+                    deleteTodo={deleteTodo}
+                    toggleComplete={toggleComplete}
+                />
 
-                <Label>There are {props.archivedTodos.length} archived tasks.</Label>
+                <Label>There are {props.todos.filter((todo: any) => todo.archived === true).length} archived tasks.</Label>
             </Card>
         </div>
     );

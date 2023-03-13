@@ -49,34 +49,32 @@ export const TodoMain = (props: any) => {
         localStorage.setItem("todoData", JSON.stringify(defaultJSON));
     }
 
-    // console.log("TodoMain");
-    // console.log(localStorage.getItem("todoData"));
-  
     const addTodo = (todoName: string) => {
         if (todoName !== "") {
             const newId = props.todos.length + 1;
-            const newTodos = [...props.todos, { id: newId, name: todoName, completed: false, dateCreated: new Date() }];
+            const newTodos = [...props.todos, { id: newId, name: todoName, completed: false, dateCreated: new Date(), archived: false }];
             props.setTodos(newTodos);
             localStorage.setItem("todoData", JSON.stringify(newTodos));
             console.log("addTodo");
-            // console.log(localStorage.getItem("todoData"));
         }
     };
-  
+
     const deleteTodo = (id: number) => {
         const newTasks = props.todos.filter((todo: any) => todo.id !== id);
         props.setTodos(newTasks);
         localStorage.setItem("todoData", JSON.stringify(newTasks));
         console.log("deleteTodo");
-        // console.log(localStorage.getItem("todoData"));
     };
-
+    
     const toggleComplete = (id: number) => {
         const newTodos = props.todos.map((todo: any) => {
             if (todo.id === id) {
                 todo.completed = !todo.completed;
+                if (todo.archived) { // if the task is archived, unarchive it
+                todo.archived = false;
+                }
                 if (todo.completed) { // set the dateCompleted to the current date if the task is completed
-                    todo.dateCompleted = new Date();
+                todo.dateCompleted = new Date();
                 }
             }
             return todo;
@@ -84,17 +82,17 @@ export const TodoMain = (props: any) => {
         props.setTodos(newTodos);
         localStorage.setItem("todoData", JSON.stringify(newTodos));
         console.log("toggleComplete");
-        // console.log(localStorage.getItem("todoData"));
     };
+
     const styles = useStyles();
 
-    const activeTodos = props.todos.filter((todo: any) => !todo.completed);
-    const completedTodos = props.todos.filter((todo: any) => todo.completed);
-    const allTodos = [...activeTodos, ...completedTodos];
+    const activeTodos = props.todos.filter((todo: any) => !todo.completed && !todo.archived);
+    const completedTodos = props.todos.filter((todo: any) => todo.completed && !todo.archived);
+    const allTodos = [...activeTodos, ...completedTodos].filter((todo: any) => !todo.archived);
 
     console.log("archivedTodos");
-    console.log(props.archivedTodos);
-    console.log("allTodos");
+    console.log(props.todos.filter((todo: any) => todo.archived));
+    console.log("Todos");
     console.log(allTodos);
 
     const currentTab = (tab: TabValue) => {
@@ -137,7 +135,7 @@ export const TodoMain = (props: any) => {
                 </TabList>
 
                 <TodoList 
-                    todos={currentTab(selectedValue)} 
+                    todos={currentTab(selectedValue).filter((todo: any) => !todo.archived)} 
                     deleteTodo={deleteTodo} 
                     toggleComplete={toggleComplete} 
                     visible={selectedValue === "all" || selectedValue === "active" || selectedValue === "completed"}
@@ -145,37 +143,19 @@ export const TodoMain = (props: any) => {
 
                 <TodoFooter
                     todos={props.todos}
-                    clearCompleted={() => {
-                        // remove all completed todos
-                        const newTodos = props.todos.filter((todo: any) => !todo.completed);
-                        props.setTodos(newTodos);
-                        localStorage.setItem("todoData", JSON.stringify(newTodos));
-                        console.log("removeAll");
-                    }}
                     archiveCompleted={() => {
                         // add dateArchived property to completed todos
                         const newTodos = props.todos.map((todo: any) => { // Adds a dateArchived property to each todo
                             if (todo.completed) {
                                 todo.dateArchived = new Date(); // Set the dateArchived property to the current date
+                                todo.archived = true;
                             }
                             return todo;
-                        }).filter((todo: any) => !todo.completed);
-                        // set new id for each todo (to avoid duplicate id)
-                        const newIdTodos = newTodos.map((todo: any, index: number) => {
-                            todo.id = index + 1;
-                            return todo;
-                        });
+                        })
 
-                        props.setTodos(newIdTodos); // Update the state
-                        localStorage.setItem("todoData", JSON.stringify(newIdTodos)); // Store the new array in localStorage
-                        console.log("removeAll");
-
-                        // move all completed todos to another list
-                        const existingArchivedTodos = JSON.parse(localStorage.getItem("todoArchive") || "[]"); // Get the existing data
-                        const newArchivedTodos = existingArchivedTodos.concat(completedTodos); // Combine the existing and completed todos into a new array
-                        props.setArchivedTodos(completedTodos); // Update the state
-                        localStorage.setItem("todoArchive", JSON.stringify(newArchivedTodos)); // Store the new array in localStorage
-                        console.log("archiveAll");
+                        props.setTodos(newTodos); // Update the state
+                        localStorage.setItem("todoData", JSON.stringify(newTodos)); // Store the new array in localStorage
+                        console.log("removeAll + archiveAll");
                     }}
 
                 />

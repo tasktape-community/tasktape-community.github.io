@@ -12,15 +12,12 @@ interface Todo {
 }
 
 export const Dashboard = React.memo(() => {
-    const [archivedTodos, setArchivedTodos] = useState<Todo[]>(
-      JSON.parse(localStorage.getItem("todoArchive") || "[]")
-    );
     const [todos, setTodos] = useState<Todo[]>(
         JSON.parse(localStorage.getItem("todoData") || "[]")
     );
     return (
         <div role="tabpanel" aria-labelledby="Dashboard">
-            <TodoMain todos={todos} setTodos={setTodos} archivedTodos={archivedTodos} setArchivedTodos={setArchivedTodos} />
+            <TodoMain todos={todos} setTodos={setTodos} />
         </div>
     );
 });

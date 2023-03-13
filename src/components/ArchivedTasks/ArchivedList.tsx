@@ -32,7 +32,8 @@ export const ArchivedList = (props: any) => {
         { props.todos.length > 0 ? props.todos.map((todo: any) => (
             <ArchivedItem todo={todo} key={todo.id} deleteTodo={props.deleteTodo} checkedTodo={props.checkedTodo} toggleComplete={props.toggleComplete}/>
         )): 
-        <Label>Todo list is empty...</Label>}
+        <Label>There are no archived tasks.</Label>
+        }
     </div>
     );
 };
