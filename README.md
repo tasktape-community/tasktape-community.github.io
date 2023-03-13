@@ -29,7 +29,7 @@ TaskTape is a Progressive Web App (PWA) built with React, using Fluent UI for a 
 
 ## Contributing
 
-Contributions are welcome! Please see our [contribution guidelines](CONTRIBUTING.md) for more information.
+Contributions are welcome! Please see our [contribution guidelines](CONTRIBUTING.md) for more information. [Here](https://github.com/tasktape-community/tasktape-community.github.io/contribute) are some issues that are easy to get started with.
 
 ## Contributors
 
