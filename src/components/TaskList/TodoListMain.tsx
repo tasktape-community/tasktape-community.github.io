@@ -12,8 +12,7 @@ import { Card } from '@fluentui/react-components/unstable';
 import { AddTodo } from "./TodoAdd";
 import { TodoFooter } from "./TodoFooter";
 import { TodoList } from './TodoList';
-import React, { useState } from 'react';
-
+import * as React from "react";
 
 const useStyles = makeStyles({
     root: {
@@ -50,22 +49,14 @@ export const TodoMain = (props: any) => {
         localStorage.setItem("todoData", JSON.stringify(defaultJSON));
     }
 
-    const [todos, setTodos] = useState<Todo[]>(
-        JSON.parse(localStorage.getItem("todoData") || "[]")
-    );
-
-    const [archivedTodos, setArchivedTodos] = useState<Todo[]>(
-        JSON.parse(localStorage.getItem("todoArchive") || "[]")
-    );
-
     // console.log("TodoMain");
     // console.log(localStorage.getItem("todoData"));
   
     const addTodo = (todoName: string) => {
         if (todoName !== "") {
-            const newId = todos.length + 1;
-            const newTodos = [...todos, { id: newId, name: todoName, completed: false, dateCreated: new Date() }];
-            setTodos(newTodos);
+            const newId = props.todos.length + 1;
+            const newTodos = [...props.todos, { id: newId, name: todoName, completed: false, dateCreated: new Date() }];
+            props.setTodos(newTodos);
             localStorage.setItem("todoData", JSON.stringify(newTodos));
             console.log("addTodo");
             // console.log(localStorage.getItem("todoData"));
@@ -73,15 +64,15 @@ export const TodoMain = (props: any) => {
     };
   
     const deleteTodo = (id: number) => {
-        const newTasks = todos.filter((todo) => todo.id !== id);
-        setTodos(newTasks);
+        const newTasks = props.todos.filter((todo: any) => todo.id !== id);
+        props.setTodos(newTasks);
         localStorage.setItem("todoData", JSON.stringify(newTasks));
         console.log("deleteTodo");
         // console.log(localStorage.getItem("todoData"));
     };
 
     const toggleComplete = (id: number) => {
-        const newTodos = todos.map((todo) => {
+        const newTodos = props.todos.map((todo: any) => {
             if (todo.id === id) {
                 todo.completed = !todo.completed;
                 if (todo.completed) { // set the dateCompleted to the current date if the task is completed
@@ -90,19 +81,19 @@ export const TodoMain = (props: any) => {
             }
             return todo;
         });
-        setTodos(newTodos);
+        props.setTodos(newTodos);
         localStorage.setItem("todoData", JSON.stringify(newTodos));
         console.log("toggleComplete");
         // console.log(localStorage.getItem("todoData"));
     };
     const styles = useStyles();
 
-    const activeTodos = todos.filter((todo) => !todo.completed);
-    const completedTodos = todos.filter((todo) => todo.completed);
+    const activeTodos = props.todos.filter((todo: any) => !todo.completed);
+    const completedTodos = props.todos.filter((todo: any) => todo.completed);
     const allTodos = [...activeTodos, ...completedTodos];
 
     console.log("archivedTodos");
-    console.log(archivedTodos);
+    console.log(props.archivedTodos);
     console.log("allTodos");
     console.log(allTodos);
 
@@ -115,7 +106,7 @@ export const TodoMain = (props: any) => {
             case "completed":
                 return completedTodos;
             default:
-                return todos;
+                return props.todos;
         }
     };
     
@@ -153,31 +144,36 @@ export const TodoMain = (props: any) => {
                 />
 
                 <TodoFooter
-                    todos={todos}
+                    todos={props.todos}
                     clearCompleted={() => {
                         // remove all completed todos
-                        const newTodos = todos.filter((todo) => !todo.completed);
-                        setTodos(newTodos);
+                        const newTodos = props.todos.filter((todo: any) => !todo.completed);
+                        props.setTodos(newTodos);
                         localStorage.setItem("todoData", JSON.stringify(newTodos));
                         console.log("removeAll");
                     }}
                     archiveCompleted={() => {
                         // add dateArchived property to completed todos
-                        const newTodos = todos.map((todo) => { // Adds a dateArchived property to each todo
+                        const newTodos = props.todos.map((todo: any) => { // Adds a dateArchived property to each todo
                             if (todo.completed) {
                                 todo.dateArchived = new Date(); // Set the dateArchived property to the current date
                             }
                             return todo;
-                        }).filter((todo) => !todo.completed);
+                        }).filter((todo: any) => !todo.completed);
+                        // set new id for each todo (to avoid duplicate id)
+                        const newIdTodos = newTodos.map((todo: any, index: number) => {
+                            todo.id = index + 1;
+                            return todo;
+                        });
 
-                        setTodos(newTodos); // Update the state
-                        localStorage.setItem("todoData", JSON.stringify(newTodos)); // Store the new array in localStorage
+                        props.setTodos(newIdTodos); // Update the state
+                        localStorage.setItem("todoData", JSON.stringify(newIdTodos)); // Store the new array in localStorage
                         console.log("removeAll");
 
                         // move all completed todos to another list
                         const existingArchivedTodos = JSON.parse(localStorage.getItem("todoArchive") || "[]"); // Get the existing data
                         const newArchivedTodos = existingArchivedTodos.concat(completedTodos); // Combine the existing and completed todos into a new array
-                        setArchivedTodos(completedTodos); // Update the state
+                        props.setArchivedTodos(completedTodos); // Update the state
                         localStorage.setItem("todoArchive", JSON.stringify(newArchivedTodos)); // Store the new array in localStorage
                         console.log("archiveAll");
                     }}

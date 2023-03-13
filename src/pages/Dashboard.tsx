@@ -1,8 +1,26 @@
-import * as React from "react";
 import { TodoMain } from "../components/TaskList/TodoListMain"
+import React, { useState } from 'react';
 
-export const Dashboard = React.memo(() => (
-    <div role="tabpanel" aria-labelledby="Dashboard">
-        <TodoMain />
-    </div>
-));
+
+interface Todo {
+    id: number;
+    name: string;
+    completed: boolean;
+    dateCreated: Date;
+    dateCompleted?: Date; // optional
+    dateArchived?: Date; // optional
+}
+
+export const Dashboard = React.memo(() => {
+    const [archivedTodos, setArchivedTodos] = useState<Todo[]>(
+      JSON.parse(localStorage.getItem("todoArchive") || "[]")
+    );
+    const [todos, setTodos] = useState<Todo[]>(
+        JSON.parse(localStorage.getItem("todoData") || "[]")
+    );
+    return (
+        <div role="tabpanel" aria-labelledby="Dashboard">
+            <TodoMain todos={todos} setTodos={setTodos} archivedTodos={archivedTodos} setArchivedTodos={setArchivedTodos} />
+        </div>
+    );
+});
