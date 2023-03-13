@@ -8,7 +8,8 @@ import {
     Tab,
 } from "@fluentui/react-components";
 import { Card } from '@fluentui/react-components/unstable';
-import { AddTodo } from './TodoAdd';
+
+import { AddTodo } from "./TodoAdd";
 import { TodoFooter } from "./TodoFooter";
 import { TodoList } from './TodoList';
 import React, { useState } from 'react';
@@ -82,7 +83,9 @@ export const TodoMain = (props: any) => {
         const newTodos = todos.map((todo) => {
             if (todo.id === id) {
                 todo.completed = !todo.completed;
-                todo.dateCompleted = new Date();
+                if (todo.completed) { // set the dateCompleted to the current date if the task is completed
+                    todo.dateCompleted = new Date();
+                }
             }
             return todo;
         });
@@ -126,6 +129,7 @@ export const TodoMain = (props: any) => {
     return (
         <div className={styles.root}>
             <Card className={styles.card} appearance="filled-alternative">
+                <h2>Task List</h2>
                 <AddTodo addTodo={addTodo} />
 
                 <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
@@ -157,13 +161,13 @@ export const TodoMain = (props: any) => {
                         console.log("removeAll");
                     }}
                     archiveCompleted={() => {
-                        // remove all completed todos
+                        // add dateArchived property to completed todos
                         const newTodos = todos.map((todo) => { // Adds a dateArchived property to each todo
                             if (todo.completed) {
-                                todo.dateArchived = new Date();
+                                todo.dateArchived = new Date(); // Set the dateArchived property to the current date
                             }
                             return todo;
-                        }).filter((todo) => !todo.completed); // Get the existing data
+                        }).filter((todo) => !todo.completed);
 
                         setTodos(newTodos); // Update the state
                         localStorage.setItem("todoData", JSON.stringify(newTodos)); // Store the new array in localStorage
