@@ -109,7 +109,7 @@ export const TodoMain = (props: any) => {
     };
     
     const [selectedValue, setSelectedValue] = React.useState<TabValue>(
-        "all"
+        "active"
     );
     
     const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
@@ -123,14 +123,14 @@ export const TodoMain = (props: any) => {
                 <AddTodo addTodo={addTodo} />
 
                 <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
-                    <Tab value="all" aria-label="All">
-                        All ({allTodos.length})
-                    </Tab>
                     <Tab value="active" aria-label="Active">
                         Active ({activeTodos.length})
                     </Tab>
                     <Tab value="completed" aria-label="Completed">
                         Completed ({completedTodos.length})
+                    </Tab>
+                    <Tab value="all" aria-label="All">
+                        All ({allTodos.length})
                     </Tab>
                 </TabList>
 
