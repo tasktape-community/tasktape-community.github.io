@@ -25,9 +25,21 @@ const useStyles = makeStyles({
         maxWidth: "100%",
         flexGrow: 1,
     },
+    content: {
+        display: "flex",
+        maxWidth: "100%",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        rowGap: "10px",
+    },
     newTask: {
         display: "flex",
         columnGap: "10px",
+    },
+    flex: {
+        display: "flex",
+        rowGap: "10px",
+        flexDirection: "column",
     },
 });
 
@@ -119,46 +131,48 @@ export const TodoMain = (props: any) => {
     return (
         <div className={styles.root}>
             <Card className={styles.card} appearance="filled-alternative">
-                <h2>Task List</h2>
-                <AddTodo addTodo={addTodo} />
+                <div className={styles.content}>
+                    <div className={styles.flex}>
+                        <h2>Task List</h2>
+                        <AddTodo addTodo={addTodo} />
 
-                <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
-                    <Tab value="active" aria-label="Active">
-                        Active ({activeTodos.length})
-                    </Tab>
-                    <Tab value="completed" aria-label="Completed">
-                        Completed ({completedTodos.length})
-                    </Tab>
-                    <Tab value="all" aria-label="All">
-                        All ({allTodos.length})
-                    </Tab>
-                </TabList>
-
-                <TodoList 
-                    todos={currentTab(selectedValue).filter((todo: any) => !todo.archived)} 
-                    deleteTodo={deleteTodo} 
-                    toggleComplete={toggleComplete} 
-                    visible={selectedValue === "all" || selectedValue === "active" || selectedValue === "completed"}
-                />
-
-                <TodoFooter
-                    todos={props.todos}
-                    archiveCompleted={() => {
-                        // add dateArchived property to completed todos
-                        const newTodos = props.todos.map((todo: any) => { // Adds a dateArchived property to each todo
-                            if (todo.completed) {
-                                todo.dateArchived = new Date(); // Set the dateArchived property to the current date
-                                todo.archived = true;
-                            }
-                            return todo;
-                        })
-
-                        props.setTodos(newTodos); // Update the state
-                        localStorage.setItem("todoData", JSON.stringify(newTodos)); // Store the new array in localStorage
-                        console.log("removeAll + archiveAll");
-                    }}
-
-                />
+                        <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
+                            <Tab value="active" aria-label="Active">
+                                Active ({activeTodos.length})
+                            </Tab>
+                            <Tab value="completed" aria-label="Completed">
+                                Completed ({completedTodos.length})
+                            </Tab>
+                            <Tab value="all" aria-label="All">
+                                All ({allTodos.length})
+                            </Tab>
+                        </TabList>
+                        <TodoList
+                            todos={currentTab(selectedValue).filter((todo: any) => !todo.archived)} 
+                            deleteTodo={deleteTodo} 
+                            toggleComplete={toggleComplete} 
+                            visible={selectedValue === "all" || selectedValue === "active" || selectedValue === "completed"}
+                        />
+                    </div>
+                    <div>
+                        <TodoFooter
+                            todos={props.todos}
+                            archiveCompleted={() => {
+                                // add dateArchived property to completed todos
+                                const newTodos = props.todos.map((todo: any) => { // Adds a dateArchived property to each todo
+                                    if (todo.completed) {
+                                        todo.dateArchived = new Date(); // Set the dateArchived property to the current date
+                                        todo.archived = true;
+                                    }
+                                    return todo;
+                                })
+                                props.setTodos(newTodos); // Update the state
+                                localStorage.setItem("todoData", JSON.stringify(newTodos)); // Store the new array in localStorage
+                                console.log("removeAll + archiveAll");
+                            }}
+                        />
+                    </div>
+                </div>
             </Card>
         </div>
     );
