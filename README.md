@@ -1,3 +1,7 @@
+# Deprecated - Moving to https://github.com/42willow/nocrastinate
+
+----
+
 # TaskTape
 
 [Live App](https://tasktape-community.github.io/) | [Documentation](https://github.com/tasktape-community/tasktape-community.github.io/wiki) | [Contributing](CONTRIBUTING.md) | [License](LICENSE)
